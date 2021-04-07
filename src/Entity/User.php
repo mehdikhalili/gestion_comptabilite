@@ -9,6 +9,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="type", type="string")
+ * @ORM\DiscriminatorMap({
+ *      "user" = "User",
+ *      "comptable" = "Comptable",
+ *      "directeur" = "Directeur"
+ * })
  */
 class User implements UserInterface
 {
