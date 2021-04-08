@@ -19,7 +19,16 @@
             <a class="nav-link">{{ app.user.username }}</a>
             <a class="nav-link btn rounded-0 dropdown-toggle dropdown-toggle-split" data-toggle="dropdown"></a>
             <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item" href="#">Modifier mes informations personnelles</a>
+              
+              {% if is_granted('ROLE_DIRECTEUR') %}
+                <a class="dropdown-item" href="{{ path('user_edit', {type : 'directeur'}) }}">Modifier votre infos personnelles</a>
+                <a class="dropdown-item" href="{{ path('user_edit', {type : 'comptable'}) }}">Modifier le comptable</a>
+              {% endif %}
+
+              {% if is_granted('ROLE_COMPTABLE') %}
+                <a class="dropdown-item" href="{{ path('user_edit', {type : 'comptable'}) }}">Modifier votre infos personnelles</a>
+              {% endif %}
+              
               <a class="dropdown-item" href="{{ path('app_logout') }}">Déconnexion</a>
             </div>
           </div>
