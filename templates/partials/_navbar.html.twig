@@ -7,8 +7,22 @@
 
     <div class="collapse navbar-collapse" id="navbarsExample07">
       <ul class="navbar-nav ml-auto">
+
         <li class="nav-item">
-          <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+          <a class="nav-link" href="#">Transactions</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Catégorisation</a>
+        </li>
+        <li class="nav-item border-left">
+          <div class="btn-group">
+            <a class="nav-link">{{ app.user.username }}</a>
+            <a class="nav-link btn rounded-0 dropdown-toggle dropdown-toggle-split" data-toggle="dropdown"></a>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" href="#">Modifier mes informations personnelles</a>
+              <a class="dropdown-item" href="{{ path('app_logout') }}">Déconnexion</a>
+            </div>
+          </div>
         </li>
       </ul>
     </div>
