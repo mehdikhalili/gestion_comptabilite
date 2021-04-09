@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Transaction;
 use App\Form\TransactionType;
 use App\Repository\TransactionRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/transaction")
+ * @IsGranted("IS_AUTHENTICATED_FULLY")
  */
 class TransactionController extends AbstractController
 {
@@ -27,6 +29,7 @@ class TransactionController extends AbstractController
 
     /**
      * @Route("/new", name="transaction_new", methods={"GET","POST"})
+     * @IsGranted("ROLE_COMPTABLE")
      */
     public function new(Request $request): Response
     {
@@ -60,6 +63,7 @@ class TransactionController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="transaction_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_COMPTABLE")
      */
     public function edit(Request $request, Transaction $transaction): Response
     {
@@ -80,6 +84,7 @@ class TransactionController extends AbstractController
 
     /**
      * @Route("/{id}", name="transaction_delete", methods={"POST"})
+     * @IsGranted("ROLE_COMPTABLE")
      */
     public function delete(Request $request, Transaction $transaction): Response
     {
