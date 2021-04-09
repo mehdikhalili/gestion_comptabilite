@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New BankAccount{% endblock %}
+
+{% block body %}
+    <h1>Create new BankAccount</h1>
+
+    {{ include('bank_account/_form.html.twig') }}
+
+    <a href="{{ path('bank_account_index') }}">back to list</a>
+{% endblock %}
