@@ -12,9 +12,13 @@ class BankAccountType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('bankName')
+            ->add('bankName', null, [
+                'label' => 'Nom de banque'
+            ])
+            ->add('numero', null, [
+                'label' => 'N° de compte'
+            ])
             ->add('solde')
-            ->add('numero')
         ;
     }
 

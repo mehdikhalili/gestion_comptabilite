@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\BankAccount;
 use App\Form\BankAccountType;
 use App\Repository\BankAccountRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/bank/account")
+ * @IsGranted("IS_AUTHENTICATED_FULLY")
  */
 class BankAccountController extends AbstractController
 {
@@ -27,6 +29,7 @@ class BankAccountController extends AbstractController
 
     /**
      * @Route("/new", name="bank_account_new", methods={"GET","POST"})
+     * @IsGranted("ROLE_COMPTABLE")
      */
     public function new(Request $request): Response
     {
@@ -39,6 +42,7 @@ class BankAccountController extends AbstractController
             $entityManager->persist($bankAccount);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Un compte bancaire a été ajouté avec succés');
             return $this->redirectToRoute('bank_account_index');
         }
 
@@ -59,16 +63,18 @@ class BankAccountController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="bank_account_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="bank_account_edit", methods={"GET","PUT"})
+     * @IsGranted("ROLE_COMPTABLE")
      */
     public function edit(Request $request, BankAccount $bankAccount): Response
     {
-        $form = $this->createForm(BankAccountType::class, $bankAccount);
+        $form = $this->createForm(BankAccountType::class, $bankAccount, ['method'=> 'PUT']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
+            $this->addFlash('success', 'Un compte bancaire a été modifié avec succés');
             return $this->redirectToRoute('bank_account_index');
         }
 
@@ -79,7 +85,8 @@ class BankAccountController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="bank_account_delete", methods={"POST"})
+     * @Route("/{id}", name="bank_account_delete", methods={"DELETE"})
+     * @IsGranted("ROLE_COMPTABLE")
      */
     public function delete(Request $request, BankAccount $bankAccount): Response
     {
@@ -88,7 +95,7 @@ class BankAccountController extends AbstractController
             $entityManager->remove($bankAccount);
             $entityManager->flush();
         }
-
+        $this->addFlash('success', 'Un compte bancaire a été supprimé avec succés');
         return $this->redirectToRoute('bank_account_index');
     }
 }

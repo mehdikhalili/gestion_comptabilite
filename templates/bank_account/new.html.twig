@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New BankAccount{% endblock %}
+{% block title %}Nouveau compte bancaire{% endblock %}
 
 {% block body %}
-    <h1>Create new BankAccount</h1>
+    <h1>Ajouter un nouveau compte bancaire</h1>
 
     {{ include('bank_account/_form.html.twig') }}
 
-    <a href="{{ path('bank_account_index') }}">back to list</a>
+    <a href="{{ path('bank_account_index') }}">Retourner à la liste</a>
 {% endblock %}
