@@ -16,13 +16,33 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('login')
-            ->add('nom')
-            ->add('prenom')
+            ->add('login', null, [
+                'constraints' => [
+                    new NotBlank([
+                        'message' => "S'il vous plaît, entrez le login",
+                    ]),
+                ],
+                'trim' => true
+            ])
+            ->add('nom', null, [
+                'constraints' => [
+                    new NotBlank([
+                        'message' => "S'il vous plaît, entrez le nom",
+                    ]),
+                ],
+                'trim' => true
+            ])
+            ->add('prenom', null, [
+                'constraints' => [
+                    new NotBlank([
+                        'message' => "S'il vous plaît, entrez le prenom",
+                    ]),
+                ],
+                'trim' => true
+            ])
             ->add('password', PasswordType::class, [
                 'label' => 'Votre mot de passe',
                 'mapped' => false,
-                'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => "S'il vous plaît, entrez votre mot de passe",
@@ -33,7 +53,6 @@ class UserType extends AbstractType
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les champs du mot de passe doivent correspondre.',
                 'options' => ['attr' => ['class' => 'password-field']],
-                'required' => false,
                 'first_options'  => ['label' => 'Nouveau mot de passe'],
                 'second_options' => ['label' => 'Répéter le mot de passe'],
                 'mapped' => false,

@@ -5,7 +5,7 @@
 {% block body %}
     <h1>{{ pageTitle }}</h1>
 
-    {{ form_start(form) }}
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
         {{ form_widget(form) }}
         <button type="submit" class="btn btn-primary">Sauvegarder</button>
     {{ form_end(form) }}
