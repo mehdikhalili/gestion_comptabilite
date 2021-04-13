@@ -8,24 +8,23 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
+                <th>N° de compte</th>
                 <th>Tireur</th>
-                <th>ModeDePaiement</th>
+                <th>Mode de paiement</th>
                 <th>Cheque</th>
-                <th>Rib</th>
-                <th>Libelle</th>
+                <th>RIB</th>
+                <th>Libellé</th>
                 <th>Note</th>
-                <th>Debit</th>
-                <th>Credit</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>actions</th>
+                <th>Débit</th>
+                <th>Crédit</th>
+                <th>Date</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
         {% for transaction in transactions %}
             <tr>
-                <td>{{ transaction.id }}</td>
+                <td>{{ transaction.bankAccount.numero }}</td>
                 <td>{{ transaction.tireur }}</td>
                 <td>{{ transaction.modeDePaiement }}</td>
                 <td>{{ transaction.cheque }}</td>
@@ -35,10 +34,9 @@
                 <td>{{ transaction.debit }}</td>
                 <td>{{ transaction.credit }}</td>
                 <td>{{ transaction.createdAt ? transaction.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ transaction.updatedAt ? transaction.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('transaction_show', {'id': transaction.id}) }}">show</a>
-                    <a href="{{ path('transaction_edit', {'id': transaction.id}) }}">edit</a>
+                    <a href="{{ path('transaction_show', {'id': transaction.id}) }}">Afficher</a>
+                    <a href="{{ path('transaction_edit', {'id': transaction.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -49,5 +47,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('transaction_new') }}">Create new</a>
+    <a href="{{ path('transaction_new') }}">Ajouter une nouvelle transaction</a>
 {% endblock %}

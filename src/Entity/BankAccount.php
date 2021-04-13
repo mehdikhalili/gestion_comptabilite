@@ -85,6 +85,11 @@ class BankAccount
         return $this;
     }
 
+    public function getNom_Numero(): ?string
+    {
+        return $this->bankName.' - '.$this->numero;
+    }
+
     /**
      * @return Collection|Transaction[]
      */

@@ -1,11 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Transaction{% endblock %}
+{% block title %}Nouvelle transaction{% endblock %}
 
 {% block body %}
-    <h1>Create new Transaction</h1>
+    <h1>Ajouter une nouvelle transaction</h1>
 
     {{ include('transaction/_form.html.twig') }}
 
     <a href="{{ path('transaction_index') }}">back to list</a>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('transaction') }}
 {% endblock %}
