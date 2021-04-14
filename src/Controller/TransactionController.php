@@ -26,7 +26,7 @@ class TransactionController extends AbstractController
     public function index(TransactionRepository $transactionRepository): Response
     {
         return $this->render('transaction/index.html.twig', [
-            'transactions' => $transactionRepository->findAll(),
+            'transactions' => $transactionRepository->findByLastAdded(),
         ]);
     }
 

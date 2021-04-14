@@ -3,5 +3,57 @@
 {% block title %}Page d'accueil{% endblock %}
 
 {% block body %}
-
+    <div class="row">
+        <div class="col-md-6 border-right">
+            <h2>Les comptes bancaires</h2>
+            {% for bankAccount in bankAccounts %}
+                <div class="row mx-1 my-4 pb-1 border-bottom">
+                    <div class="col-6">
+                        <h6>{{ bankAccount.bankName }}</h6>
+                        <span class="text-secondary">{{ bankAccount.numero }}</span>
+                    </div>
+                    <div class="col-6 d-flex align-items-center">
+                        {% if bankAccount.solde >= 0 %}
+                        <span class="ml-auto text-success">
+                        {% else %}
+                        <span class="ml-auto text-danger">
+                        {% endif %}
+                            {{ bankAccount.solde }} MAD
+                        </span>
+                    </div>
+                </div>
+            {% endfor %}
+            <a class="btn btn-light mb-5" href="{{ path('bank_account_new') }}">+ Ajouter un compte bancaire</a>
+        </div>
+        <div class="col-md-6">
+            <h2>Les dernièrs activités</h2>
+            {% for transaction in transactions %}
+                <div class="row mx-1 my-4 pb-1 border-bottom">
+                    <div class="col-6">
+                        <h6>{{ transaction.tireur }}</h6>
+                        <span class="text-secondary">
+                            {% if transaction.modeDePaiement == 'virement' %}
+                            Virment
+                            {% elseif transaction.modeDePaiement == 'cheque' %}
+                            Chèque
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="col-6 d-flex align-items-center">
+                        {% if transaction.credit is not null %}
+                            <span class="text-danger ml-auto">
+                                -{{ transaction.credit }}
+                            </span>
+                        {% else %}
+                            <span class="text-success ml-auto">
+                                +{{ transaction.debit }}
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            <a class="btn btn-light mb-1" href="{{ path('transaction_index') }}">Afficher toutes les transactions</a>
+            <a class="btn btn-light" href="{{ path('transaction_new') }}">+ Ajouter une transaction</a>
+        </div>
+    </div>
 {% endblock %}

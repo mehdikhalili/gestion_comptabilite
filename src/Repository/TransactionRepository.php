@@ -30,6 +30,28 @@ class TransactionRepository extends ServiceEntityRepository
         return $result->fetchAllAssociative();
     }
 
+    /**
+     * @return Transaction[] Returns an array of Transaction objects
+     */
+    public function findByLastAddedLimited()
+    {
+        return $this->createQueryBuilder('t')
+            ->orderBy('t.createdAt', 'DESC')
+            ->setMaxResults(3)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findByLastAdded()
+    {
+        return $this->createQueryBuilder('t')
+            ->orderBy('t.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Transaction[] Returns an array of Transaction objects
     //  */
