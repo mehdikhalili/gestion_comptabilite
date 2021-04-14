@@ -8,32 +8,30 @@
     <table class="table">
         <thead>
             <tr>
+                <th>Date</th>
                 <th>N° de compte</th>
                 <th>Tireur</th>
                 <th>Mode de paiement</th>
-                <th>Cheque</th>
+                <th>Chèque</th>
                 <th>RIB</th>
                 <th>Libellé</th>
-                <th>Note</th>
                 <th>Débit</th>
                 <th>Crédit</th>
-                <th>Date</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
         {% for transaction in transactions %}
             <tr>
+                <td>{{ transaction.createdAt ? transaction.createdAt|date('d/m/y') : '' }}</td>
                 <td>{{ transaction.bankAccount.numero }}</td>
                 <td>{{ transaction.tireur }}</td>
                 <td>{{ transaction.modeDePaiement }}</td>
                 <td>{{ transaction.cheque }}</td>
                 <td>{{ transaction.rib }}</td>
-                <td>{{ transaction.libelle }}</td>
-                <td>{{ transaction.note }}</td>
+                <td>{{ include('partials/_generateLibelle.html.twig', {'libelle': transaction.libelle}) }}</td>
                 <td>{{ transaction.debit }}</td>
                 <td>{{ transaction.credit }}</td>
-                <td>{{ transaction.createdAt ? transaction.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('transaction_show', {'id': transaction.id}) }}">Afficher</a>
                     <a href="{{ path('transaction_edit', {'id': transaction.id}) }}">Modifier</a>

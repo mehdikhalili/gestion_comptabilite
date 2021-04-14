@@ -1,16 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Transaction{% endblock %}
+{% block title %}Transaction #{{ transaction.id }}{% endblock %}
 
 {% block body %}
-    <h1>Transaction</h1>
+    <h1>Transaction #{{ transaction.id }}</h1>
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ transaction.id }}</td>
-            </tr>
             <tr>
                 <th>Tireur</th>
                 <td>{{ transaction.tireur }}</td>
@@ -29,7 +25,7 @@
             </tr>
             <tr>
                 <th>Libelle</th>
-                <td>{{ transaction.libelle }}</td>
+                <td>{{ include('partials/_generateLibelle.html.twig', {'libelle': transaction.libelle}) }}</td>
             </tr>
             <tr>
                 <th>Note</th>

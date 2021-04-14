@@ -10,19 +10,7 @@
             <tr>
                 <td>
                     <a class="text-body" href="#">
-                    {% if categorie.libelle == "achat_materiel_informatique" %}
-                        Achat matériel informatique
-                    {% elseif categorie.libelle == "achat_logiciel" %}
-                        Achat logiciel
-                    {% elseif categorie.libelle == "frais_electricite" %}
-                        Frais d'électricité
-                    {% elseif categorie.libelle == "loyer" %}
-                        Loyer
-                    {% elseif categorie.libelle == "salaire" %}
-                        Salaire
-                    {% elseif categorie.libelle == "paiement_client" %}
-                        Paiement de client
-                    {% endif %}
+                    {{ include('partials/_generateLibelle.html.twig', {'libelle': categorie.libelle}) }}
                     </a>
                 </td>
                 <td class="d-flex">

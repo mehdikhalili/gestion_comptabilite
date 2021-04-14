@@ -84,8 +84,8 @@ class TransactionType extends AbstractType
                     'Achat logiciel' => 'achat_logiciel',
                     "Frais d'électricité" => 'frais_electricite',
                     'Loyer' => 'loyer',
-                    'Salaire' => 'salaire',
                     'Paiement de client' => 'paiement_client',
+                    'Salaire' => 'salaire',
                 ],
                 'multiple' => false,
                 'expanded' => false,
@@ -99,8 +99,8 @@ class TransactionType extends AbstractType
                             'achat_logiciel',
                             'frais_electricite',
                             'loyer',
-                            'salaire',
                             'paiement_client',
+                            'salaire',
                         ],
                         'message' => "La valeur que vous avez sélectionnée n'est pas un choix valide."
                     ])
