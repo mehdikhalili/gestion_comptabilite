@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catégorisation{% endblock %}
+
+{% block body %}
+    <h1>Les catégories des transactions</h1>
+
+    <table class="table">
+        {% for categorie in categories %}
+            <tr>
+                <td>
+                    <a class="text-body" href="#">
+                    {% if categorie.libelle == "achat_materiel_informatique" %}
+                        Achat matériel informatique
+                    {% elseif categorie.libelle == "achat_logiciel" %}
+                        Achat logiciel
+                    {% elseif categorie.libelle == "frais_electricite" %}
+                        Frais d'électricité
+                    {% elseif categorie.libelle == "loyer" %}
+                        Loyer
+                    {% elseif categorie.libelle == "salaire" %}
+                        Salaire
+                    {% elseif categorie.libelle == "paiement_client" %}
+                        Paiement de client
+                    {% endif %}
+                    </a>
+                </td>
+                <td class="d-flex">
+                    {% if categorie.credit is not null %}
+                        <span class="text-danger ml-auto">
+                            -{{ categorie.credit }}
+                        </span>
+                    {% else %}
+                        <span class="text-success ml-auto">
+                            +{{ categorie.debit }}
+                        </span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">Il y a aucune transaction</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

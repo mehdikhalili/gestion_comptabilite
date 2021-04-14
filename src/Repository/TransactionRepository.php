@@ -19,6 +19,17 @@ class TransactionRepository extends ServiceEntityRepository
         parent::__construct($registry, Transaction::class);
     }
 
+    public function findByLibelle(): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT libelle, SUM(debit) AS debit, SUM(credit) AS credit
+                FROM `transaction`
+                GROUP BY libelle
+                ORDER BY libelle ASC";
+        $result = $conn->executeQuery($sql);
+        return $result->fetchAllAssociative();
+    }
+
     // /**
     //  * @return Transaction[] Returns an array of Transaction objects
     //  */
