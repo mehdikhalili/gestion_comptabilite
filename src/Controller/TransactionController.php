@@ -57,7 +57,7 @@ class TransactionController extends AbstractController
             $entityManager->persist($transaction);
             $entityManager->flush();
 
-            $this->addFlash('succes', "Une transaction a été ajouté avec succés");
+            $this->addFlash('success', "Une transaction a été ajouté avec succés");
 
             return $this->redirectToRoute('transaction_index');
         }
