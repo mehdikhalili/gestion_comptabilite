@@ -1,0 +1,9 @@
+{% if credit is not null %}
+    <span class="text-danger ml-auto">
+        -{{ credit }}
+    </span>
+{% else %}
+    <span class="text-success ml-auto">
+        +{{ debit }}
+    </span>
+{% endif %}

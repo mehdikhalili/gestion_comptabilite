@@ -14,15 +14,7 @@
                     </a>
                 </td>
                 <td class="d-flex">
-                    {% if categorie.credit is not null %}
-                        <span class="text-danger ml-auto">
-                            -{{ categorie.credit }}
-                        </span>
-                    {% else %}
-                        <span class="text-success ml-auto">
-                            +{{ categorie.debit }}
-                        </span>
-                    {% endif %}
+                    {{ include('partials/_generateDebitCredit.html.twig', {'credit': categorie.credit, 'debit': categorie.debit}) }}
                 </td>
             </tr>
         {% else %}

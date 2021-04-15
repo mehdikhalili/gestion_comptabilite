@@ -8,9 +8,9 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Nom de banque</th>
+                <th>Nom du banque</th>
                 <th>N° de compte</th>
-                <th>Solde</th>
+                <th>Solde (MAD)</th>
                 <th></th>
             </tr>
         </thead>
@@ -19,11 +19,17 @@
             <tr>
                 <td>{{ bank_account.bankName }}</td>
                 <td>{{ bank_account.numero }}</td>
-                <td>{{ bank_account.solde }}</td>
                 <td>
-                    <a href="{{ path('bank_account_show', {'id': bank_account.id}) }}">Afficher</a>
+                    {% if bank_account.solde >= 0 %}
+                    <span class="text-success">+{{ bank_account.solde }}</span>
+                    {% else %}
+                    <span class="text-danger">{{ bank_account.solde }}</span>
+                    {% endif %}
+                </td>
+                <td class="d-flex">
+                    <a class="ml-auto" href="{{ path('bank_account_show', {'id': bank_account.id}) }}">Afficher</a>
                     {% if is_granted('ROLE_COMPTABLE') %}
-                        <a href="{{ path('bank_account_edit', {'id': bank_account.id}) }}">Modifier</a>
+                        <a class="ml-auto" href="{{ path('bank_account_edit', {'id': bank_account.id}) }}">Modifier</a>
                     {% endif %}
                 </td>
             </tr>
