@@ -4,50 +4,19 @@
 
 {% block body %}
     <h1>La liste des transactions</h1>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>N° de compte</th>
-                    <th>Tireur</th>
-                    <th>Mode de paiement</th>
-                    <th>Chèque/RIB</th>
-                    <th>Libellé</th>
-                    <th>Débit/Crédit</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for transaction in transactions %}
-                <tr>
-                    <td>{{ transaction.createdAt ? transaction.createdAt|date('d/m/y') : '' }}</td>
-                    <td>{{ transaction.bankAccount.numero }}</td>
-                    <td>{{ transaction.tireur }}</td>
-                    <td>{{ include('partials/_generateModeDePaiement.html.twig', {'modeDePaiement': transaction.modeDePaiement}) }}</td>
-                    <td>
-                        {{ include('partials/_generateChequeRib.html.twig', {'cheque': transaction.cheque, 'rib': transaction.rib}) }}
-                    </td>
-                    <td>{{ include('partials/_generateLibelle.html.twig', {'libelle': transaction.libelle}) }}</td>
-                    <td class="d-flex">
-                        {{ include('partials/_generateDebitCredit.html.twig', {'credit': transaction.credit, 'debit': transaction.debit}) }}
-                    </td>
-                    <td>
-                        <a href="{{ path('transaction_show', {'id': transaction.id}) }}">Afficher</a>
-                        {% if is_granted('ROLE_COMPTABLE') %}
-                            <a href="{{ path('transaction_edit', {'id': transaction.id}) }}">Modifier</a>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="8">no records found</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    <div class="d-flex flex-row my-2">
+        <input id="date_input" class="form-control ml-auto" type="date" value="" max="{{ 'now'|date('Y-m-d') }}" style="width: 180px;" path="{{ path('transaction_search') }}">
+    </div>
+    
+    <div id="table" class="table-responsive">
+        {{ include('transaction/_transactionsTable.html.twig') }}
     </div>
     {% if is_granted('ROLE_COMPTABLE') %}
         <a href="{{ path('transaction_new') }}">Ajouter une nouvelle transaction</a>
     {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('transaction') }}
 {% endblock %}

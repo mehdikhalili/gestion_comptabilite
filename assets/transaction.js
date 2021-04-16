@@ -39,4 +39,25 @@ $(function() {
             $('#transaction_credit').parent().parent().show()
         }
     }
+
+    // search field
+    /* $('#search_btn').click(function() {
+        var path = $(this).attr('path')
+        var date = $('#date_input').val()
+        $.post(path, {
+                'date': date
+            }, function(data) {
+                $('#table').html(data);
+        })
+    }) */
+
+    $('#date_input').change(function() {
+        var path = $(this).attr('path')
+        var date = $(this).val()
+        $.post(path, {
+                'date': date
+            }, function(data) {
+                $('#table').html(data);
+        })
+    })
 });

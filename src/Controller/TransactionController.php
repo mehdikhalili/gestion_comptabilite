@@ -104,7 +104,7 @@ class TransactionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="transaction_delete", methods={"POST"})
+     * @Route("/{id}", name="transaction_delete", methods={"DELETE"})
      * @IsGranted("ROLE_COMPTABLE")
      */
     public function delete(Request $request, Transaction $transaction): Response
@@ -130,6 +130,23 @@ class TransactionController extends AbstractController
         return $this->redirectToRoute('transaction_index');
     }
 
+    /**
+     * @Route("/search", name="transaction_search", methods={"POST"})
+     */
+    public function search(Request $request, TransactionRepository $transactionRepository): Response
+    {
+        if ($request->isXmlHttpRequest()) {
+
+            $date = $request->request->get('date');
+
+            if (!is_null($date)) {
+                //dd($transactionRepository->findByDate($date));
+                return $this->render('transaction/_ajaxSearch.html.twig', [
+                    'transactions' => $transactionRepository->findByDate($date),
+                ]);
+            }
+        }
+    }
 
     private function dataValidation(FormInterface $form, Transaction $transaction, string $type)
     {
