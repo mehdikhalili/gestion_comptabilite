@@ -104,7 +104,7 @@ class TransactionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="transaction_delete", methods={"DELETE"})
+     * @Route("/{id}", name="transaction_delete", methods={"POST"})
      * @IsGranted("ROLE_COMPTABLE")
      */
     public function delete(Request $request, Transaction $transaction): Response
