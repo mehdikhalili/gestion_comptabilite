@@ -8,7 +8,11 @@
     <table class="table">
         <tbody>
             <tr>
-                <th>Tireur</th>
+                <th>Date</th>
+                <td>{{ transaction.date ? transaction.date|date('d/m/Y') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Tireur/Tiré</th>
                 <td>{{ transaction.tireur }}</td>
             </tr>
             <tr>
@@ -16,11 +20,11 @@
                 <td>{{ include('partials/_generateModeDePaiement.html.twig', {'modeDePaiement': transaction.modeDePaiement}) }}</td>
             </tr>
             <tr>
-                <th>Chèque/RIB</th>
+                <th>Réf de paiement/RIB</th>
                 <td>{{ include('partials/_generateChequeRib.html.twig', {'cheque': transaction.cheque, 'rib': transaction.rib}) }}</td>
             </tr>
             <tr>
-                <th>Libelle</th>
+                <th>Libellé</th>
                 <td>{{ include('partials/_generateLibelle.html.twig', {'libelle': transaction.libelle}) }}</td>
             </tr>
             <tr>

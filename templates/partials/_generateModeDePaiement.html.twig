@@ -1,5 +1,9 @@
 {% if modeDePaiement == 'virement' %}
-Virment
+Virement
 {% elseif modeDePaiement == 'cheque' %}
 Chèque
+{% elseif modeDePaiement == 'especes' %}
+Espéces
+{% elseif modeDePaiement == 'prelevement' %}
+Prélevement
 {% endif %}

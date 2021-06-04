@@ -16,15 +16,22 @@ $(function() {
     })
 
     function modeDePaiement() {
-        if ('virement' === $('#transaction_modeDePaiement').val()) {
+        var modeDePaiement = $('#transaction_modeDePaiement').val()
+        if ('virement' === modeDePaiement || 'prelevement' === modeDePaiement) {
             $('#transaction_cheque').parent().parent().hide()
             $('#transaction_cheque').val(null)
             $('#transaction_rib').parent().parent().show()
         }
-        else if('cheque' === $('#transaction_modeDePaiement').val()){
+        else if('cheque' === modeDePaiement){
             $('#transaction_rib').parent().parent().hide()
             $('#transaction_rib').val(null)
             $('#transaction_cheque').parent().parent().show()
+        }
+        else if('especes' === modeDePaiement){
+            $('#transaction_rib').parent().parent().hide()
+            $('#transaction_rib').val(null)
+            $('#transaction_cheque').parent().parent().hide()
+            $('#transaction_cheque').val(null)
         }
     }
 
@@ -39,17 +46,6 @@ $(function() {
             $('#transaction_credit').parent().parent().show()
         }
     }
-
-    // search field
-    /* $('#search_btn').click(function() {
-        var path = $(this).attr('path')
-        var date = $('#date_input').val()
-        $.post(path, {
-                'date': date
-            }, function(data) {
-                $('#table').html(data);
-        })
-    }) */
 
     $('#date_input').change(function() {
         var path = $(this).attr('path')

@@ -3,32 +3,32 @@
         <tr>
             <th>Date</th>
             <th>N° de compte</th>
-            <th>Tireur</th>
             <th>Mode de paiement</th>
-            <th>Chèque/RIB</th>
-            <th>Libellé</th>
+            <th>Tireur/Tiré</th>
+            <th>RIB/Réf de paiement</th>
             <th>Débit/Crédit</th>
+            <th>Libellé</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
     {% for transaction in transactions %}
         <tr>
-            <td>{{ transaction.createdAt ? transaction.createdAt|date('d/m/y') : '' }}</td>
+            <td>{{ transaction.date ? transaction.date|date('d/m/y') : '' }}</td>
             <td>{{ transaction.bankAccount.numero }}</td>
-            <td>{{ transaction.tireur }}</td>
             <td>{{ include('partials/_generateModeDePaiement.html.twig', {'modeDePaiement': transaction.modeDePaiement}) }}</td>
+            <td>{{ transaction.tireur }}</td>
             <td>
                 {{ include('partials/_generateChequeRib.html.twig', {'cheque': transaction.cheque, 'rib': transaction.rib}) }}
             </td>
-            <td>{{ include('partials/_generateLibelle.html.twig', {'libelle': transaction.libelle}) }}</td>
             <td class="d-flex">
                 {{ include('partials/_generateDebitCredit.html.twig', {'credit': transaction.credit, 'debit': transaction.debit}) }}
             </td>
+            <td>{{ include('partials/_generateLibelle.html.twig', {'libelle': transaction.libelle}) }}</td>
             <td>
-                <a href="{{ path('transaction_show', {'id': transaction.id}) }}">Afficher</a>
+                <a class="btn btn-secondary btn-sm" href="{{ path('transaction_show', {'id': transaction.id}) }}"><i class="far fa-eye"></i></a>
                 {% if is_granted('ROLE_COMPTABLE') %}
-                    <a href="{{ path('transaction_edit', {'id': transaction.id}) }}">Modifier</a>
+                    <a class="btn btn-warning btn-sm" href="{{ path('transaction_edit', {'id': transaction.id}) }}"><i class="fas fa-pencil-alt text-white"></i></a>
                 {% endif %}
             </td>
         </tr>

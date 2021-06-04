@@ -47,7 +47,6 @@ class TransactionController extends AbstractController
             $transaction->setCredit($form->get('credit')->getData());
             $transaction->setDebit($form->get('debit')->getData());
 
-            // TODO : Changer le solde de compte bancaire
             $this->changeBankAccountSolde($form, $transaction, 'new');
 
             $transaction->setCreatedAt(new DateTime());
@@ -104,7 +103,7 @@ class TransactionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="transaction_delete", methods={"POST"})
+     * @Route("/{id<[0-9]+>}", name="transaction_delete", methods={"POST"})
      * @IsGranted("ROLE_COMPTABLE")
      */
     public function delete(Request $request, Transaction $transaction): Response
@@ -138,9 +137,8 @@ class TransactionController extends AbstractController
         if ($request->isXmlHttpRequest()) {
 
             $date = $request->request->get('date');
-
+            
             if (!is_null($date)) {
-                //dd($transactionRepository->findByDate($date));
                 return $this->render('transaction/_ajaxSearch.html.twig', [
                     'transactions' => $transactionRepository->findByDate($date),
                 ]);
@@ -174,7 +172,12 @@ class TransactionController extends AbstractController
             return $this->renderNewEdit($form, $transaction, $type);
         }
 
-        if (($modeDePaiement === 'cheque' && !is_null($rib)) || ($modeDePaiement === 'virement' && !is_null($cheque)) || ($libelle === 'paiement_client' && !is_null($credit)) || ($libelle !== 'paiement_client' && !is_null($debit))) {
+        if (($modeDePaiement === 'cheque' && !is_null($rib)) || 
+            (($modeDePaiement === 'virement' || $modeDePaiement === 'prelevement') && !is_null($cheque)) || 
+            ($modeDePaiement === 'especes' && (!is_null($cheque) && !is_null($rib))) ||
+            ($libelle === 'paiement_client' && !is_null($credit)) || 
+            ($libelle !== 'paiement_client' && !is_null($debit))
+        ) {
             $this->addFlash('danger', "N'essayez pas de changer les entrées");
             if ($type === 'new') {
                 return $this->redirectToRoute('transaction_new');

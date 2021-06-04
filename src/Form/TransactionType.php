@@ -7,7 +7,6 @@ use App\Entity\Transaction;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,6 +19,15 @@ class TransactionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('date', null, [
+                'widget' => 'single_text',
+                'attr' => ['max' => date("Y-m-d")],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => "S'il vous plaît, choisissez une date",
+                    ]),
+                ],
+            ])
             ->add('bankAccount', EntityType::class, [
                 'class' => BankAccount::class,
                 'choice_label' => function($bankAccount) {
@@ -35,23 +43,11 @@ class TransactionType extends AbstractType
                 ],
                 'trim' => true,
             ])
-            ->add('tireur', null, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => "S'il vous plaît, tapez le nom de titeur",
-                    ]),
-                    new Length([
-                        'min' => 2,
-                        'max' => 50,
-                        'minMessage' => 'Le nom de titeur doit comporter au moins {{ limit }} caractères',
-                        'maxMessage' => 'Le nom de titeur ne peut pas comporter plus de {{limit}} caractères',
-                    ]),
-                ],
-                'trim' => true,
-            ])
             ->add('modeDePaiement', ChoiceType::class, [
                 'choices' => [
                     'Chèque' => 'cheque',
+                    'Espéces' => 'especes',
+                    'Prélevement' => 'prelevement',
                     'Virement' => 'virement',
                 ],
                 'multiple' => false,
@@ -69,13 +65,36 @@ class TransactionType extends AbstractType
                     ])
                 ],
             ])
+            ->add('tireur', null, [
+                'constraints' => [
+                    new NotBlank([
+                        'message' => "S'il vous plaît, tapez le nom de titeur",
+                    ]),
+                    new Length([
+                        'min' => 2,
+                        'max' => 50,
+                        'minMessage' => 'Le nom de titeur doit comporter au moins {{ limit }} caractères',
+                        'maxMessage' => 'Le nom de titeur ne peut pas comporter plus de {{limit}} caractères',
+                    ]),
+                ],
+                'trim' => true,
+                'label' => 'Tireur/Tiré'
+            ])
             ->add('cheque', null, [
-                'label' => 'Chèque',
+                'label' => 'Réf de paiement',
                 'trim' => true,
             ])
             ->add('rib', null, [
                 'label' => 'RIB',
                 'trim' => true,
+            ])
+            ->add('debit', null, [
+                'label' => 'Débit',
+                'mapped' => false
+            ])
+            ->add('credit', null, [
+                'label' => 'Crédit',
+                'mapped' => false
             ])
             ->add('libelle', ChoiceType::class, [
                 'label' => 'Libellé',
@@ -105,14 +124,6 @@ class TransactionType extends AbstractType
                         'message' => "La valeur que vous avez sélectionnée n'est pas un choix valide."
                     ])
                 ],
-            ])
-            ->add('debit', null, [
-                'label' => 'Débit',
-                'mapped' => false
-            ])
-            ->add('credit', null, [
-                'label' => 'Crédit',
-                'mapped' => false
             ])
             ->add('note', TextareaType::class, [
                 'trim' => true,

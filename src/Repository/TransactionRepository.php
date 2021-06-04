@@ -57,17 +57,8 @@ class TransactionRepository extends ServiceEntityRepository
      */
     public function findByDate(string $date): array
     {
-        /* $conn = $this->getEntityManager()->getConnection();
-        $sql = "SELECT *
-                FROM `transaction`
-                WHERE DATE(created_at) = :val";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute(['val' => $date]);
-
-        return $stmt->fetchAllAssociative(); */
-
         return $this->createQueryBuilder('t')
-            ->where('DATE(t.createdAt) = :date')
+            ->where('t.date = :date')
             ->setParameter('date', $date)
             ->orderBy('t.createdAt', 'DESC')
             ->getQuery()
