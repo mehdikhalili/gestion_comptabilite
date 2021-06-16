@@ -29,7 +29,7 @@
               
               {% if is_granted('ROLE_DIRECTEUR') %}
                 <a class="dropdown-item" href="{{ path('user_edit', {type : 'directeur'}) }}">Modifier votre infos personnelles</a>
-                <a class="dropdown-item" href="{{ path('user_edit', {type : 'comptable'}) }}">Modifier le comptable</a>
+                <a class="dropdown-item" href="{{ path('user_edit', {type : 'comptable'}) }}">Modifier le trésorier</a>
               {% endif %}
 
               {% if is_granted('ROLE_COMPTABLE') %}

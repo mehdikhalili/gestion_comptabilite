@@ -21,9 +21,9 @@
                 <td>{{ bank_account.numero }}</td>
                 <td>
                     {% if bank_account.solde >= 0 %}
-                    <span class="text-success">+{{ bank_account.solde }}</span>
+                    <span class="text-success">+{{ bank_account.solde|number_format(2) }}</span>
                     {% else %}
-                    <span class="text-danger">{{ bank_account.solde }}</span>
+                    <span class="text-danger">{{ (bank_account.solde)|number_format(2) }}</span>
                     {% endif %}
                 </td>
                 <td class="d-flex">

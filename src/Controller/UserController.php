@@ -33,7 +33,7 @@ class UserController extends AbstractController
         }
         elseif ($type === 'comptable') {
             $user = $this->getDoctrine()->getRepository(Comptable::class)->findAll()[0];
-            $pageTitle = 'Modifier le comptable';
+            $pageTitle = 'Modifier le trésorier';
         }
         else {
             throw new NotFoundHttpException();
