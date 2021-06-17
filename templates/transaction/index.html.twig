@@ -4,8 +4,17 @@
 
 {% block body %}
     <h1>La liste des transactions</h1>
-    <div class="d-flex flex-row my-2">
-        <input id="date_input" class="form-control ml-auto" type="date" value="" max="{{ 'now'|date('Y-m-d') }}" style="width: 180px;" path="{{ path('transaction_search') }}">
+    <div class="d-flex justify-content-end align-items-center my-3">
+        {{ form_start(filter_form, {'attr': {'novalidate': 'novalidate', 'class': 'mr-3'}}) }}
+            {{ form_widget(filter_form.bankAccount)}}
+        {{ form_end(filter_form) }}
+        <label class="mx-2" for="date_du">Du :</label>
+        <input id="date_du" class="form-control mr-3" type="date" value="" max="{{ 'now'|date('Y-m-d') }}" style="width: 180px;">
+        <label class="mx-2" for="date_au">Au :</label>
+        <input id="date_au" class="form-control mr-2" type="date" value="" max="{{ 'now'|date('Y-m-d') }}" style="width: 180px;">
+        <button id="filtrer" class="btn btn-primary" path="{{ path('transaction_search') }}">
+            <i class="fas fa-filter"></i> Filtrer
+        </button>
     </div>
     
     <div id="table" class="table-responsive">

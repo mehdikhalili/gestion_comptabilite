@@ -2,17 +2,22 @@
 
 namespace App\Controller;
 
+use App\Entity\BankAccount;
 use App\Entity\Transaction;
 use App\Form\TransactionType;
+use App\Repository\BankAccountRepository;
 use App\Repository\TransactionRepository;
 use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * @Route("/transaction")
@@ -25,8 +30,22 @@ class TransactionController extends AbstractController
      */
     public function index(TransactionRepository $transactionRepository): Response
     {
+        $form = $this->createFormBuilder()
+            ->add('bankAccount', EntityType::class, [
+                'class' => BankAccount::class,
+                'choice_label' => function($bankAccount) {
+                    return $bankAccount->getNom_Numero();
+                },
+                'multiple' => false,
+                'expanded' => false,
+                'trim' => true,
+                'placeholder' => 'Choisi un compte bancaire',
+            ])
+            ->getForm()
+        ;
         return $this->render('transaction/index.html.twig', [
             'transactions' => $transactionRepository->findByLastAdded(),
+            'filter_form' => $form->createView(),
         ]);
     }
 
@@ -87,7 +106,6 @@ class TransactionController extends AbstractController
 
             $this->dataValidation($form, $transaction, 'edit');
 
-            // TODO : Changer le solde de compte bancaire
             $this->changeBankAccountSolde($form, $transaction, 'edit');
 
             $transaction->setUpdatedAt(new DateTime());
@@ -132,15 +150,50 @@ class TransactionController extends AbstractController
     /**
      * @Route("/search", name="transaction_search", methods={"POST"})
      */
-    public function search(Request $request, TransactionRepository $transactionRepository): Response
+    public function search(Request $request, TransactionRepository $transactionRepository, BankAccountRepository $bankAccountRepository): Response
     {
         if ($request->isXmlHttpRequest()) {
 
-            $date = $request->request->get('date');
+            $bankAccount = $request->request->get('bankAccount');
+            $date_du = $request->request->get('date_du');
+            $date_au = $request->request->get('date_au');
             
-            if (!is_null($date)) {
+            if (!empty($bankAccount) && empty($date_du) && empty($date_au)) {
+                $transactions = array();
+                foreach ($transactionRepository->findAll() as $transaction) {
+                    if ($transaction->getBankAccount()->getId() == $bankAccount) {
+                        $transactions[] = $transaction;
+                    }
+                }
+
+                usort($transactions, function (Transaction $t1, Transaction $t2) {
+                    if ($t1->getCreatedAt() == $t2->getCreatedAt()) return 0;
+                    return ($t1->getCreatedAt() > $t2->getCreatedAt()) ? -1 : 1;
+                });
+
                 return $this->render('transaction/_ajaxSearch.html.twig', [
-                    'transactions' => $transactionRepository->findByDate($date),
+                    'transactions' => $transactions
+                ]);
+            }
+            elseif (empty($bankAccount) && !empty($date_du) && !empty($date_au)) {
+                return $this->render('transaction/_ajaxSearch.html.twig', [
+                    'transactions' => $transactionRepository->findByDate($date_du, $date_au),
+                ]);
+            }
+            elseif (!empty($bankAccount) && !empty($date_du) && !empty($date_au)) {
+                $transactions = array();
+                foreach ($transactionRepository->findByDate($date_du, $date_au) as $transaction) {
+                    if ($transaction->getBankAccount()->getId() == $bankAccount) {
+                        $transactions[] = $transaction;
+                    }
+                }
+                return $this->render('transaction/_ajaxSearch.html.twig', [
+                    'transactions' => $transactions
+                ]);
+            }
+            elseif (empty($bankAccount) && empty($date_du) && empty($date_au)) {
+                return $this->render('transaction/_ajaxSearch.html.twig', [
+                    'transactions' => $transactionRepository->findByLastAdded(),
                 ]);
             }
         }

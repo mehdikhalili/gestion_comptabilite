@@ -47,13 +47,18 @@ $(function() {
         }
     }
 
-    $('#date_input').change(function() {
+    $('#filtrer').click(function() {
         var path = $(this).attr('path')
-        var date = $(this).val()
+        var bankAccount = $('#form_bankAccount').val()
+        var date_du = $('#date_du').val()
+        var date_au = $('#date_au').val()
         $.post(path, {
-                'date': date
+                'bankAccount': bankAccount,
+                'date_du': date_du,
+                'date_au': date_au,
             }, function(data) {
                 $('#table').html(data);
         })
+        /* alert("compte: "+ bankAccount+ "\ndu : "+date_du+"\nau:"+date_au) */
     })
 });

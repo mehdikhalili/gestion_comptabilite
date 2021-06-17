@@ -60,6 +60,8 @@ class TransactionType extends AbstractType
                         'choices' => [
                             'cheque',
                             'virement',
+                            'especes',
+                            'prelevement',
                         ],
                         'message' => "La valeur que vous avez sélectionnée n'est pas un choix valide."
                     ])

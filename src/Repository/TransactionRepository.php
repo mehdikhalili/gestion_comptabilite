@@ -2,8 +2,12 @@
 
 namespace App\Repository;
 
+use App\Entity\BankAccount;
 use App\Entity\Transaction;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\AST\BetweenExpression;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -55,15 +59,41 @@ class TransactionRepository extends ServiceEntityRepository
     /**
      * @return Transaction[] Returns an array of Transaction objects
      */
-    public function findByDate(string $date): array
+    public function findByDate(string $date_du, string $date_au): array
     {
         return $this->createQueryBuilder('t')
-            ->where('t.date = :date')
-            ->setParameter('date', $date)
+            ->where('t.date >= :date_du')
+            ->andWhere('t.date <= :date_au')
+            ->setParameter('date_du', $date_du)
+            ->setParameter('date_au', $date_au)
             ->orderBy('t.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    /**
+     * @return Transaction[] Returns an array of Transaction objects
+     */
+    public function findByBankAccount(BankAccount $bankAccount): array
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.bankAccount = :bankAccount')
+            ->setParameter('bankAccount', $bankAccount)
+            ->orderBy('t.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        /* $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT t.*
+                FROM `transaction` t, bank_account b
+                WHERE t.bank_account_id = b.id
+                AND t.bank_account_id = ?
+                ORDER BY t.created_at DESC";
+        $conn->prepare($sql);
+        $result = $conn->executeQuery($sql, [$bankAccount]);
+        return $result->fetchAllAssociative(); */
     }
 
     // /**
