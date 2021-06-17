@@ -71,6 +71,16 @@ class Transaction
      */
     private $date;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $prevSolde;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $nextSolde;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -192,6 +202,30 @@ class Transaction
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function getPrevSolde(): ?float
+    {
+        return $this->prevSolde;
+    }
+
+    public function setPrevSolde(float $prevSolde): self
+    {
+        $this->prevSolde = $prevSolde;
+
+        return $this;
+    }
+
+    public function getNextSolde(): ?float
+    {
+        return $this->nextSolde;
+    }
+
+    public function setNextSolde(float $nextSolde): self
+    {
+        $this->nextSolde = $nextSolde;
 
         return $this;
     }

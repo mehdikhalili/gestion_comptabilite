@@ -65,9 +65,11 @@ class TransactionController extends AbstractController
 
             $transaction->setCredit($form->get('credit')->getData());
             $transaction->setDebit($form->get('debit')->getData());
+            $transaction->setPrevSolde($transaction->getBankAccount()->getSolde());
 
             $this->changeBankAccountSolde($form, $transaction, 'new');
-
+            
+            $transaction->setNextSolde($transaction->getBankAccount()->getSolde());
             $transaction->setCreatedAt(new DateTime());
             $transaction->setUpdatedAt(new DateTime());
 

@@ -36,6 +36,42 @@
                 <td>{{ transaction.note }}</td>
             </tr>
             <tr>
+                <th>Le solde avant</th>
+                <td>
+                    {% if transaction.prevSolde >= 0 %}
+                    <span class="text-success">
+                    {% else %}
+                    <span class="text-danger">
+                    {% endif %}
+                        {{ (transaction.prevSolde)|number_format(2) }} MAD
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>Le solde après</th>
+                <td>
+                    {% if transaction.nextSolde >= 0 %}
+                    <span class="text-success">
+                    {% else %}
+                    <span class="text-danger">
+                    {% endif %}
+                        {{ (transaction.nextSolde)|number_format(2) }} MAD
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>Le solde maintenant</th>
+                <td>
+                    {% if transaction.bankAccount.solde >= 0 %}
+                    <span class="text-success">
+                    {% else %}
+                    <span class="text-danger">
+                    {% endif %}
+                        {{ (transaction.bankAccount.solde)|number_format(2) }} MAD
+                    </span>
+                </td>
+            </tr>
+            <tr>
                 <th>Créé à</th>
                 <td>{{ transaction.createdAt ? transaction.createdAt|date('d/m/Y H:i') : '' }}</td>
             </tr>

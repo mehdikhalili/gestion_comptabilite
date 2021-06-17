@@ -34,6 +34,17 @@ class TransactionRepository extends ServiceEntityRepository
         return $result->fetchAllAssociative();
     }
 
+    public function findByLibelleTest(string $libelle): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT SUM(debit) AS debit, SUM(credit) AS credit
+                FROM `transaction`
+                WHERE libelle = :libelle";
+        $result = $conn->prepare($sql);
+        $result->execute(['libelle' => $libelle]);
+        return $result->fetchAssociative();
+    }
+
     /**
      * @return Transaction[] Returns an array of Transaction objects
      */
