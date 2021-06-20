@@ -63,23 +63,25 @@ class TransactionController extends AbstractController
 
             $this->dataValidation($form, $transaction, 'new');
 
-            $transaction->setCredit($form->get('credit')->getData());
-            $transaction->setDebit($form->get('debit')->getData());
-            $transaction->setPrevSolde($transaction->getBankAccount()->getSolde());
+            if ($this->dataValidation($form, $transaction, 'new')) {
+                $transaction->setCredit($form->get('credit')->getData());
+                $transaction->setDebit($form->get('debit')->getData());
+                $transaction->setPrevSolde($transaction->getBankAccount()->getSolde());
 
-            $this->changeBankAccountSolde($form, $transaction, 'new');
-            
-            $transaction->setNextSolde($transaction->getBankAccount()->getSolde());
-            $transaction->setCreatedAt(new DateTime());
-            $transaction->setUpdatedAt(new DateTime());
+                $this->changeBankAccountSolde($form, $transaction, 'new');
+                
+                $transaction->setNextSolde($transaction->getBankAccount()->getSolde());
+                $transaction->setCreatedAt(new DateTime());
+                $transaction->setUpdatedAt(new DateTime());
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($transaction);
-            $entityManager->flush();
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($transaction);
+                $entityManager->flush();
 
-            $this->addFlash('success', "Une transaction a été ajouté avec succés");
+                $this->addFlash('success', "Une transaction a été ajouté avec succés");
 
-            return $this->redirectToRoute('transaction_index');
+                return $this->redirectToRoute('transaction_index');
+            }
         }
 
         return $this->renderNewEdit($form, $transaction, 'new');
@@ -106,17 +108,18 @@ class TransactionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->dataValidation($form, $transaction, 'edit');
+            if ($this->dataValidation($form, $transaction, 'edit')) {
+                
+                $this->changeBankAccountSolde($form, $transaction, 'edit');
 
-            $this->changeBankAccountSolde($form, $transaction, 'edit');
+                $transaction->setUpdatedAt(new DateTime());
 
-            $transaction->setUpdatedAt(new DateTime());
+                $this->getDoctrine()->getManager()->flush();
 
-            $this->getDoctrine()->getManager()->flush();
+                $this->addFlash('success', "Une transaction a été modifié avec succés");
 
-            $this->addFlash('success', "Une transaction a été modifié avec succés");
-
-            return $this->redirectToRoute('transaction_index');
+                return $this->redirectToRoute('transaction_index');
+            }
         }
 
         return $this->renderNewEdit($form, $transaction, 'edit');
@@ -203,6 +206,7 @@ class TransactionController extends AbstractController
 
     private function dataValidation(FormInterface $form, Transaction $transaction, string $type)
     {
+        $date = $form->get('date')->getData();
         $modeDePaiement = $form->get('modeDePaiement')->getData();
         $cheque = $form->get('cheque')->getData();
         $rib = $form->get('rib')->getData();
@@ -210,37 +214,44 @@ class TransactionController extends AbstractController
         $debit = $form->get('debit')->getData();
         $credit = $form->get('credit')->getData();
 
-        if ($modeDePaiement === 'cheque' && is_null($cheque)) {
-            $form->get('cheque')->addError(new FormError("S'il vous plaît, tapez le numero du chèque"));
-            return $this->renderNewEdit($form, $transaction, $type);
+        $is_valid = true;
+
+        if (empty($date)) {
+            $form->get('date')->addError(new FormError("S'il vous plaît, spécifiez la date"));
+            $is_valid = false;
         }
-        elseif ($modeDePaiement === 'virement' && is_null($rib)) {
+        if ($modeDePaiement === 'cheque' && empty($cheque)) {
+            $form->get('cheque')->addError(new FormError("S'il vous plaît, tapez le réf de paiement"));
+            $is_valid = false;
+        }
+        elseif ($modeDePaiement === 'virement' && empty($rib)) {
             $form->get('rib')->addError(new FormError("S'il vous plaît, entrez le RIB"));
-            return $this->renderNewEdit($form, $transaction, $type);
+            $is_valid = false;
         }
-        if ($libelle === 'paiement_client' && is_null($debit)) {
+        if ($libelle === 'paiement_client' && empty($debit)) {
             $form->get('debit')->addError(new FormError("S'il vous plaît, entrez le débit"));
-            return $this->renderNewEdit($form, $transaction, $type);
+            $is_valid = false;
         }
-        elseif ($libelle !== 'paiement_client' && is_null($credit)) {
+        elseif ($libelle !== 'paiement_client' && empty($credit)) {
             $form->get('credit')->addError(new FormError("S'il vous plaît, entrez le crédit"));
-            return $this->renderNewEdit($form, $transaction, $type);
+            $is_valid = false;
         }
 
-        if (($modeDePaiement === 'cheque' && !is_null($rib)) || 
-            (($modeDePaiement === 'virement' || $modeDePaiement === 'prelevement') && !is_null($cheque)) || 
-            ($modeDePaiement === 'especes' && (!is_null($cheque) && !is_null($rib))) ||
-            ($libelle === 'paiement_client' && !is_null($credit)) || 
-            ($libelle !== 'paiement_client' && !is_null($debit))
+        if (($modeDePaiement === 'cheque' && !empty($rib)) || 
+            (($modeDePaiement === 'virement' || $modeDePaiement === 'prelevement') && !empty($cheque)) || 
+            ($modeDePaiement === 'especes' && (!empty($cheque) && !empty($rib))) ||
+            ($libelle === 'paiement_client' && !empty($credit)) || 
+            ($libelle !== 'paiement_client' && !empty($debit))
         ) {
+            $is_valid = false;
             $this->addFlash('danger', "N'essayez pas de changer les entrées");
             if ($type === 'new') {
                 return $this->redirectToRoute('transaction_new');
             } else {
                 return $this->redirectToRoute('transaction_edit', ['id' => $transaction->getId()]);
             }
-            
         }
+        return $is_valid;
     }
 
     private function renderNewEdit(FormInterface $form, Transaction $transaction, string $type): Response

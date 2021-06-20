@@ -4,29 +4,11 @@
 
 {% block body %}
     <h1>Les catégories des transactions</h1>
-    <div id="chart_div"></div>
-    {#
-    <h1>Les catégories des transactions</h1>
-
-    <table class="table">
-        {% for categorie in categories %}
-            <tr>
-                <td>
-                    <a class="text-body" href="#">
-                    {{ include('partials/_generateLibelle.html.twig', {'libelle': categorie.libelle}) }}
-                    </a>
-                </td>
-                <td class="d-flex">
-                    {{ include('partials/_generateDebitCredit.html.twig', {'credit': categorie.credit, 'debit': categorie.debit}) }}
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="2">Il y a aucune transaction</td>
-            </tr>
-        {% endfor %}
-    </table>
-    #}
+    <div class="row">
+        <div id="chart_div1" class="col-md-6"></div>
+        <div id="chart_div2" class="col-md-6"></div>
+    </div>
+    
 {% endblock %}
 
 {% block javascripts %}
@@ -36,9 +18,13 @@
 
       google.charts.load('current', {'packages':['corechart']});
 
-      google.charts.setOnLoadCallback(drawChart);
+      google.charts.setOnLoadCallback(drawChart1);
+      google.charts.setOnLoadCallback(drawChart2);
 
-      function drawChart() {
+      var width = 700;
+      var height = 400;
+    
+      function drawChart1() {
 
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Topping');
@@ -53,10 +39,32 @@
         ]);
 
         var options = {'title':'Les catégories par montant',
-                       'width':800,
-                       'height':600};
+                       'width':width,
+                       'height':height};
 
-        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div1'));
+        chart.draw(data, options);
+      }
+
+      function drawChart2() {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows([
+        ['Achat matériel informatique', {{ achat_materiel_informatique.num }}],
+        ['Achat logiciel', {{ achat_logiciel.num }}],
+        ["Frais d'électricité", {{ frais_electricite.num }}],
+        ['Loyer', {{ loyer.num }}],
+        ['Paiement de client', {{ paiement_client.num }}],
+        ['salaire', {{ salaire.num }}]
+        ]);
+
+        var options = {'title':'Les catégories par nombre des transactions',
+                    'width':width,
+                    'height':height};
+
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div2'));
         chart.draw(data, options);
       }
     </script>

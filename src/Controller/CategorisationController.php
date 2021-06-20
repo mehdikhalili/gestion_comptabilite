@@ -20,13 +20,16 @@ class CategorisationController extends AbstractController
     public function index(TransactionRepository $transactionRepository): Response
     {
         return $this->render('categorisation/index.html.twig', [
-            /* 'categories' => $transactionRepository->findByLibelle(), */
-            'achat_materiel_informatique' => $transactionRepository->findByLibelleTest('achat_materiel_informatique'),
-            'achat_logiciel' => $transactionRepository->findByLibelleTest('achat_logiciel'),
-            'frais_electricite' => $transactionRepository->findByLibelleTest('frais_electricite'),
-            'loyer' => $transactionRepository->findByLibelleTest('loyer'),
-            'paiement_client' => $transactionRepository->findByLibelleTest('paiement_client'),
-            'salaire' => $transactionRepository->findByLibelleTest('salaire'),
+            'achat_materiel_informatique' => $this->merge($transactionRepository, 'achat_materiel_informatique'),
+            'achat_logiciel' => $this->merge($transactionRepository, 'achat_logiciel'),
+            'frais_electricite' => $this->merge($transactionRepository, 'frais_electricite'),
+            'loyer' => $this->merge($transactionRepository, 'loyer'),
+            'paiement_client' => $this->merge($transactionRepository, 'paiement_client'),
+            'salaire' => $this->merge($transactionRepository, 'salaire'),
         ]);
+    }
+
+    private function merge(TransactionRepository $transactionRepository, string $libelle) {
+        return array_merge($transactionRepository->findByLibelleMontant($libelle), $transactionRepository->findByLibelleCount($libelle));
     }
 }

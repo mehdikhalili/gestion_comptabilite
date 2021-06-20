@@ -23,21 +23,21 @@ class TransactionRepository extends ServiceEntityRepository
         parent::__construct($registry, Transaction::class);
     }
 
-    public function findByLibelle(): array
-    {
-        $conn = $this->getEntityManager()->getConnection();
-        $sql = "SELECT libelle, SUM(debit) AS debit, SUM(credit) AS credit
-                FROM `transaction`
-                GROUP BY libelle
-                ORDER BY libelle ASC";
-        $result = $conn->executeQuery($sql);
-        return $result->fetchAllAssociative();
-    }
-
-    public function findByLibelleTest(string $libelle): array
+    public function findByLibelleMontant(string $libelle): array
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = "SELECT SUM(debit) AS debit, SUM(credit) AS credit
+                FROM `transaction`
+                WHERE libelle = :libelle";
+        $result = $conn->prepare($sql);
+        $result->execute(['libelle' => $libelle]);
+        return $result->fetchAssociative();
+    }
+
+    public function findByLibelleCount(string $libelle): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT COUNT(*) AS num
                 FROM `transaction`
                 WHERE libelle = :libelle";
         $result = $conn->prepare($sql);

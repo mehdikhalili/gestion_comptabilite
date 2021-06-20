@@ -13,6 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class TransactionType extends AbstractType
 {
@@ -21,11 +22,14 @@ class TransactionType extends AbstractType
         $builder
             ->add('date', null, [
                 'widget' => 'single_text',
-                'attr' => ['max' => date("Y-m-d")],
+                'attr' => ['max' => date("Y-m-d"), 'value' => date("Y-m-d")],
                 'constraints' => [
                     new NotBlank([
                         'message' => "S'il vous plaît, choisissez une date",
                     ]),
+                    new NotNull([
+                        'message' => "S'il vous plaît, choisissez une date",
+                    ])
                 ],
             ])
             ->add('bankAccount', EntityType::class, [
