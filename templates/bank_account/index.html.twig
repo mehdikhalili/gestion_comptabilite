@@ -5,7 +5,7 @@
 {% block body %}
     <h1>La liste des comptes bancaires</h1>
 
-    <table class="table">
+    <table class="table mt-4">
         <thead>
             <tr>
                 <th>Nom du banque</th>
@@ -26,10 +26,10 @@
                     <span class="text-danger">{{ (bank_account.solde)|number_format(2) }}</span>
                     {% endif %}
                 </td>
-                <td class="d-flex">
-                    <a class="ml-auto" href="{{ path('bank_account_show', {'id': bank_account.id}) }}">Afficher</a>
+                <td>
+                    <a class="btn btn-secondary btn-sm" href="{{ path('bank_account_show', {'id': bank_account.id}) }}"><i class="far fa-eye"></i></a>
                     {% if is_granted('ROLE_COMPTABLE') %}
-                        <a class="ml-auto" href="{{ path('bank_account_edit', {'id': bank_account.id}) }}">Modifier</a>
+                        <a class="btn btn-warning btn-sm" href="{{ path('bank_account_edit', {'id': bank_account.id}) }}"><i class="fas fa-pencil-alt text-white"></i></a>
                     {% endif %}
                 </td>
             </tr>
@@ -41,6 +41,6 @@
         </tbody>
     </table>
     {% if is_granted('ROLE_COMPTABLE') %}
-        <a href="{{ path('bank_account_new') }}">Ajouter un nouveau compte bancaire</a>
+        <a class="btn btn-light" href="{{ path('bank_account_new') }}"><i class="fa fa-plus"></i> Ajouter un compte bancaire</a>
     {% endif %}
 {% endblock %}

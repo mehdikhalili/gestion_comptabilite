@@ -5,40 +5,35 @@
 {% block navbar %}{% endblock %}
 
 {% block body %}
-<form method="post">
+<form method="post" class="">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
     {% if app.user %}
         <div class="mb-3">
-            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+            Vous êtes déjà connecté comme {{ app.user.username }}, <a href="{{ path('app_logout') }}">Déconnecter</a>
         </div>
     {% endif %}
-
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputLogin">Login</label>
-    <input type="text" value="{{ last_username }}" name="login" id="inputLogin" class="form-control" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" required>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-    {#
-        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-        See https://symfony.com/doc/current/security/remember_me.html
-
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me"> Remember me
-            </label>
+    <div class="row">
+        <div class="col-md-5 mx-auto">
+            <h1 class="h3 my-5 font-weight-normal text-center">Authentification</h1>
+            <div class="row mt-3">
+                <label for="inputLogin" class="col-4">Nom d'utilisateur</label>
+                <input type="text" value="{{ last_username }}" name="login" id="inputLogin" class="form-control col-8" required autofocus>
+               
+            </div>
+            <div class="row mt-4">
+                <label for="inputPassword" class="col-4">Mot de passe</label>
+                <input type="password" name="password" id="inputPassword" class="form-control col-8" required>
+            </div>
+            <div class="row">
+                <button class="btn btn-primary col-8 mt-4 mx-auto" type="submit">Connexion</button>
+            </div>
+            
+            
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
         </div>
-    #}
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
+    </div>
 </form>
 {% endblock %}

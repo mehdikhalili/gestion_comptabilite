@@ -21,7 +21,7 @@
         {{ include('transaction/_transactionsTable.html.twig') }}
     </div>
     {% if is_granted('ROLE_COMPTABLE') %}
-        <a href="{{ path('transaction_new') }}">Ajouter une nouvelle transaction</a>
+        <a class="btn btn-light" href="{{ path('transaction_new') }}"><i class="fa fa-plus"></i> Ajouter une nouvelle transaction</a>
     {% endif %}
 {% endblock %}
 

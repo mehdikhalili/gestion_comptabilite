@@ -3,9 +3,10 @@
 {% block title %}Compte bancaire #{{ bank_account.id }}{% endblock %}
 
 {% block body %}
+    
     <h1>Compte bancaire #{{ bank_account.id }}</h1>
 
-    <table class="table">
+    <table class="table mt-4">
         <tbody>
             <tr>
                 <th>Nom de banque</th>
@@ -28,10 +29,12 @@
         </tbody>
     </table>
 
-    <a  class="btn btn-light mb-1" href="{{ path('bank_account_index') }}">Retourner à la liste</a><br>
     {% if is_granted('ROLE_COMPTABLE') %}
-        <a class="btn btn-warning mb-1" href="{{ path('bank_account_edit', {'id': bank_account.id}) }}">Modifier</a>
+        <div class="d-inline-flex mb-4">
+            <a class="btn btn-warning text-white mr-2" href="{{ path('bank_account_edit', {'id': bank_account.id}) }}"><i class="fas fa-pencil-alt"></i> Modifier</a>
 
-        {{ include('bank_account/_delete_form.html.twig') }}
+            {{ include('bank_account/_delete_form.html.twig') }}
+        </div>
+        
     {% endif %}
 {% endblock %}

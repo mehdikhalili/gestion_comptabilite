@@ -24,7 +24,7 @@
                 </div>
             {% endfor %}
             {% if is_granted('ROLE_COMPTABLE') %}
-                <a class="btn btn-light mb-5" href="{{ path('bank_account_new') }}">+ Ajouter un compte bancaire</a>
+                <a class="btn btn-dark mb-5" href="{{ path('bank_account_new') }}"><i class="fa fa-plus"></i> Ajouter un compte bancaire</a>
             {% endif %}
         </div>
         <div class="col-md-6">
@@ -42,9 +42,9 @@
                     </div>
                 </div>
             {% endfor %}
-            <a class="btn btn-light mb-1" href="{{ path('transaction_index') }}">Afficher toutes les transactions</a>
+            <a class="btn btn-light" href="{{ path('transaction_index') }}">Afficher toutes les transactions</a>
             {% if is_granted('ROLE_COMPTABLE') %}
-                <a class="btn btn-light" href="{{ path('transaction_new') }}">+ Ajouter une transaction</a>
+                <a class="btn btn-dark" href="{{ path('transaction_new') }}"><i class="fa fa-plus"></i> Ajouter une transaction</a>
             {% endif %}
         </div>
     </div>
