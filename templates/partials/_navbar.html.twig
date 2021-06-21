@@ -28,15 +28,15 @@
             <div class="dropdown-menu dropdown-menu-right">
               
               {% if is_granted('ROLE_DIRECTEUR') %}
-                <a class="dropdown-item" href="{{ path('user_edit', {type : 'directeur'}) }}">Modifier votre infos personnelles</a>
+                <a class="dropdown-item" href="{{ path('user_edit', {type : 'directeur'}) }}">Modifier vos infos personnelles</a>
                 <a class="dropdown-item" href="{{ path('user_edit', {type : 'comptable'}) }}">Modifier le trésorier</a>
               {% endif %}
 
               {% if is_granted('ROLE_COMPTABLE') %}
-                <a class="dropdown-item" href="{{ path('user_edit', {type : 'comptable'}) }}">Modifier votre infos personnelles</a>
+                <a class="dropdown-item" href="{{ path('user_edit', {type : 'comptable'}) }}">Modifier vos infos personnelles</a>
               {% endif %}
               
-              <a class="dropdown-item" href="{{ path('app_logout') }}">Déconnexion</a>
+              <a class="dropdown-item" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt mr-1"></i>Déconnexion</a>
             </div>
           </div>
         </li>

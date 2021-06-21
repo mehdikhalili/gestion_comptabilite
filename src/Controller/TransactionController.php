@@ -39,7 +39,7 @@ class TransactionController extends AbstractController
                 'multiple' => false,
                 'expanded' => false,
                 'trim' => true,
-                'placeholder' => 'Choisi un compte bancaire',
+                'placeholder' => 'Choisir un compte bancaire',
             ])
             ->getForm()
         ;
